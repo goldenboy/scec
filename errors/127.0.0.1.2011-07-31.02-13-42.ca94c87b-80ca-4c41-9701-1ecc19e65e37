@@ -1,0 +1,20 @@
+(dp1
+S'output'
+p2
+S''
+sS'layer'
+p3
+S'/home/diazluis2007/web2py/applications/scec/controllers/default.py'
+p4
+sS'code'
+p5
+S'# -*- coding: utf-8 -*-\n# this file is released under public domain and you can use without limitations\n\n#########################################################################\n## This is a samples controller\n## - index is the default action of any application\n## - user is required for authentication and authorization\n## - download is for downloading files uploaded in the db (does streaming)\n## - call exposes all registered services (none by default)\n#########################################################################\n\ndef index():\n    """\n    example action using the internationalization operator T and flash\n    rendered by views/default/index.html or views/generic.html\n    """\n    return dict(message=T(\'Hello World\'))\n\ndef user():\n    """\n    exposes:\n    http://..../[app]/default/user/login\n    http://..../[app]/default/user/logout\n    http://..../[app]/default/user/register\n    http://..../[app]/default/user/profile\n    http://..../[app]/default/user/retrieve_password\n    http://..../[app]/default/user/change_password\n    use @auth.requires_login()\n        @auth.requires_membership(\'group name\')\n        @auth.requires_permission(\'read\',\'table name\',record_id)\n    to decorate functions that need access control\n    """\n\n    form_perfil = None\n\n    if request.args:\n        if request.args[0]==\'profile\': \n\n            perfil = db(db.perfil.user==id_user).select()\n\n            if len(perfil)==0:\n                perfil_id = db.perfil.insert(user=id_user)\n            else:\n                perfil_id = perfil[0].id\n\n            form_perfil = crud.update(db.perfil, perfil_id, deletable=False, next=URL(\'index\'))     \n\n\n    return dict(form=auth(), form_perfil=form_perfil)\n\n\ndef download():\n    """\n    allows downloading of uploaded files\n    http://..../[app]/default/download/[filename]\n    """\n    return response.download(request,db)\n\n\ndef call():\n    """\n    exposes services. for example:\n    http://..../[app]/default/call/jsonrpc\n    decorate with @services.jsonrpc the functions to expose\n    supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv\n    """\n    return service()\n\n\n@auth.requires_signature()\ndef data():\n    """\n    http://..../[app]/default/data/tables\n    http://..../[app]/default/data/create/[table]\n    http://..../[app]/default/data/read/[table]/[id]\n    http://..../[app]/default/data/update/[table]/[id]\n    http://..../[app]/default/data/delete/[table]/[id[\n    http://..../[app]/default/data/select/[table]\n    http://..../[app]/default/data/search/[table]\n    but URLs bust be signed, i.e. linked with\n      A(\'table\',_href=URL(\'data/tables\',user_signature=True))\n    or with the signed load operator\n      LOAD(\'default\',\'data.load\',args=\'tables\',ajax=True,user_signature=True)\n    """\n    return dict(form=crud())\n\nresponse._vars=response._caller(user)\n'
+p6
+sS'snapshot'
+p7
+(dp8
+sS'traceback'
+p9
+S'Traceback (most recent call last):\n  File "/home/diazluis2007/web2py/gluon/restricted.py", line 192, in restricted\n    exec ccode in environment\n  File "/home/diazluis2007/web2py/applications/scec/controllers/default.py", line 87, in <module>\n  File "/home/diazluis2007/web2py/gluon/globals.py", line 137, in <lambda>\n    self._caller = lambda f: f()\n  File "/home/diazluis2007/web2py/applications/scec/controllers/default.py", line 39, in user\n    perfil = db(db.perfil.user==id_user).select()\n  File "/home/diazluis2007/web2py/gluon/dal.py", line 4255, in __getattr__\n    return self[key]\n  File "/home/diazluis2007/web2py/gluon/dal.py", line 4249, in __getitem__\n    return dict.__getitem__(self, str(key))\nKeyError: \'perfil\'\n'
+p10
+s.

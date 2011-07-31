@@ -1,7 +1,30 @@
 {{extend 'layout.html'}}
-<h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2>
-<div id="web2py_user_form">
-{{=form}}
+
+
+
+<table>
+    <tr>
+        <td>
+            <h2>Datos de Acceso</h2>
+            {{=form}}
+            <br/>
+            Si desea cambiar el email, por favor dirijase a las <br/>
+            oficinas de control de estudios
+        </td>
+    {{ if form_perfil: }}
+        <td>
+            <h2>Datos Basicos de Perfil</h2>
+            
+                {{ =form_perfil }}
+        </td>
+     {{ pass }}
+    </tr>
+
+</table>
+
+
+
+
 {{if request.args(0)=='login':}}
 {{if not 'register' in auth.settings.actions_disabled:}}
 <br/><a href="{{=URL(r=request,args='register')}}">register</a>
@@ -10,7 +33,7 @@
 <br/><a href="{{=URL(r=request,args='request_reset_password')}}">lost password</a>
 {{pass}}
 {{pass}}
-</div>
+
 
 <script language="javascript">
 <!--

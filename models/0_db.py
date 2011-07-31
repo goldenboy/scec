@@ -89,6 +89,14 @@ db.auth_user.last_name.readable=False
 db.auth_user.last_name.writable=False
 
 
+auth.settings.register_next = URL('default','user', args=['profile'])
+
+
+_usuario_tipo = {
+    'b':'Bachiller',
+    'p':'Profesor'
+}
+
 
 _sexo = {
     'f':'Femenino',
