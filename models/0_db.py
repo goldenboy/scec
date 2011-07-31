@@ -89,7 +89,10 @@ db.define_table('pais',
 )
 
 
-
+_sexo = {
+    'f':'Femenino',
+    'm':'Masculino'
+}
 
 
 
