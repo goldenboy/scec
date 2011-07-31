@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-db.define_table('baciller',
+db.define_table('bachiller',
     Field('di', 'integer'),
     Field('nombre', 'string', length=64),
     Field('apellido', 'string', length=64),
@@ -16,4 +16,5 @@ db.define_table('baciller',
 
 
 
-db.baciller.nac.label = 'Nacionalidad'
+db.bachiller.nac.label = 'Nacionalidad'
+db.bachiller.nac.requires = IS_IN_DB(db, 'pais.id', '%(nombre)s', zero='Seleccione el Pais')
