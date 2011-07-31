@@ -18,3 +18,4 @@ db.define_table('bachiller',
 
 db.bachiller.nac.label = 'Nacionalidad'
 db.bachiller.nac.requires = IS_IN_DB(db, 'pais.id', '%(nombre)s', zero='Seleccione el Pais')
+db.bachiller.nac.comment = 'Nacionalidad'
