@@ -80,6 +80,32 @@ crud.settings.auth = None        # =auth to enforce authorization on crud
 ## >>> for row in rows: print row.id, row.myfield
 #########################################################################
 
+id_user = (auth.user and auth.user.id) or None
+
+
+
+
+_sexo = {
+    'f':'Femenino',
+    'm':'Masculino'
+}
+
+_grupo_sang = {
+    '1':'O+',
+    '2':'A+',
+    '3':'B+',
+    '4':'AB+',
+    '5':'O-',
+    '6':'A-',
+    '7':'B-',
+    '8':'AB-',
+}
+
+_raza = {
+    '1':'Caucásico',
+    '2':'Afroamericano',
+    '3':'Asiático',
+}
 
 
 
@@ -89,15 +115,11 @@ db.define_table('pais',
 )
 
 
-_sexo = {
-    'f':'Femenino',
-    'm':'Masculino'
-}
 
-
-
-
-
+db.define_table('estado', #estado o region del pais
+    Field('nombre', 'string', length=64),
+    format='%(nombre)s'
+)
 
 
 
