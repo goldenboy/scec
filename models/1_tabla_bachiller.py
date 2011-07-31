@@ -27,10 +27,14 @@ db.bachiller.nombre.requires = db.bachiller.apellido.requires = [
 db.bachiller.nac.label = 'Nacionalidad'
 db.bachiller.nac.requires = IS_IN_DB(db, 'pais.id', '%(nombre)s', zero='Seleccione el Pais')
 
+
+db.bachiller.estado_civil.requires = IS_IN_SET(_estado_civil, zero='Seleccione el estado Civil')
+
+
 db.bachiller.sexo.requires = IS_IN_SET(_sexo, zero='Seleccione el Sexo')
 
 
-db.bachiller.estado.requires = IS_IN_DB(db, 'estado.nombre', zero='Solo aplica a Venezuela')
+db.bachiller.estado.requires = IS_IN_DB(db, 'estado.nombre', zero=None)
 
 db.bachiller.direccion.requires = IS_NOT_EMPTY()
 db.bachiller.direccion.widget = SQLFORM.widgets.text.widget

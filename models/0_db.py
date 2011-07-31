@@ -90,6 +90,14 @@ _sexo = {
     'm':'Masculino'
 }
 
+_estado_civil = {
+    'c':'Casado',
+    's':'Soltero',
+    'd':'Divorciado',
+    'b':'Concubinato',
+    'v':'Viudo'
+}
+
 _grupo_sang = {
     '1':'O+',
     '2':'A+',
