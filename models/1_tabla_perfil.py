@@ -15,7 +15,6 @@ db.define_table('perfil',
     Field('direccion', 'string', length=512),
     Field('tlf_fijo', 'string', length=64 ),
     Field('tlf_movil', 'string', length=64),
-    Field('tipo', 'string', length=1, default='b',  writable=False),
     Field('fecha_reg', 'date', default=request.now, writable=False),
     Field('user', db.auth_user, default=id_user, writable=False, readable=False),
 )
@@ -56,9 +55,6 @@ db.perfil.tlf_fijo.requires = db.perfil.tlf_movil.requires = [
     IS_NOT_EMPTY()
 ]
 
-
-
-db.perfil.tipo.represent = lambda v: _usuario_tipo[v] 
 
 
 

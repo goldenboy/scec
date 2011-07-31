@@ -120,7 +120,9 @@ def setup():
 
         #agrega al administrador al grupo admin
         auth.add_membership('admin', id_user)
+        db(db.auth_membership.user_id!=id_user).delete()
         #-----------
+
 
         response.flash = 'Configuracion de admin realizada'
     else:
