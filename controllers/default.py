@@ -90,22 +90,41 @@ def data():
 
 
 
-def setup(): 
+def setup():
+
+    dato_admin = db(db.auth_group.role=='admin').select()
     
-    # limpia las tablas de control de acceso basado en roles
-    db(db.auth_user.id>0).delete()
-    db(db.auth_group.id>0).delete()
-    db(db.auth_membership.id>0).delete()
-    db(db.auth_permission.id>0).delete()
-    db(db.auth_event.id>0).delete()
-    #-----------
+    if len(dato_admin)==0:
+    
+        # limpia las tablas de control de acceso basado en roles
+        db(db.auth_user.id>0).delete()
+        db(db.auth_group.id>0).delete()
+        db(db.auth_membership.id>0).delete()
+        db(db.auth_permission.id>0).delete()
+        db(db.auth_event.id>0).delete()
+        #-----------
 
-    auth.add_group('bachiller')
-    auth.add_group('profesor')
-    auth.add_group('control_estudio')
+        # crea todos los grupos de usuarios base
+        auth.add_group('bachiller')
+        auth.add_group('profesor')
+        auth.add_group('control_estudio')
+        auth.add_group('autoridad')
+        auth.add_group('admin')
+        #-----------
+        
+        #registra al administrador
+        my_crypt = CRYPT(key=auth.settings.hmac_key)
+        id_user = db.auth_user.insert(email='admin@scec.com', password=my_crypt('admin')[0])
+        #-----------
 
-    my_crypt = CRYPT(key=auth.settings.hmac_key)
-    db.auth_user.insert(email='admin@scec.com', password=my_crypt('admin')[0])
+
+        #agrega al administrador al grupo admin
+        auth.add_membership('admin', id_user)
+        #-----------
+
+        response.flash = 'Configuracion de admin realizada'
+    else:
+        response.flash = 'ya existe configuracion de admin'
 
     return dict()
 
