@@ -83,6 +83,11 @@ crud.settings.auth = None        # =auth to enforce authorization on crud
 id_user = (auth.user and auth.user.id) or None
 
 
+db.auth_user.first_name.readable=False
+db.auth_user.first_name.writable=False
+db.auth_user.last_name.readable=False
+db.auth_user.last_name.writable=False
+
 
 
 _sexo = {
