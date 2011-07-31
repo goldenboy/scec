@@ -87,3 +87,48 @@ def data():
       LOAD('default','data.load',args='tables',ajax=True,user_signature=True)
     """
     return dict(form=crud())
+
+
+
+def setup(): 
+    
+    # limpia las tablas de control de acceso basado en roles
+    db(db.auth_user.id>0).delete()
+    db(db.auth_group.id>0).delete()
+    db(db.auth_membership.id>0).delete()
+    db(db.auth_permission.id>0).delete()
+    db(db.auth_event.id>0).delete()
+    #-----------
+
+    auth.add_group('bachiller')
+    auth.add_group('profesor')
+    auth.add_group('control_estudio')
+
+    my_crypt = CRYPT(key=auth.settings.hmac_key)
+    db.auth_user.insert(email='admin@scec.com', password=my_crypt('admin')[0])
+
+    return dict()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
