@@ -1,6 +1,36 @@
 # -*- coding: utf-8 -*-
 
 
+_sexo = {
+    'f':'Femenino',
+    'm':'Masculino'
+}
+
+_estado_civil = {
+    'c':'Casado',
+    's':'Soltero',
+    'd':'Divorciado',
+    'b':'Concubinato',
+    'v':'Viudo'
+}
+
+_grupo_sang = {
+    '1':'O+',
+    '2':'A+',
+    '3':'B+',
+    '4':'AB+',
+    '5':'O-',
+    '6':'A-',
+    '7':'B-',
+    '8':'AB-',
+}
+
+_raza = {
+    '1':'Caucásico',
+    '2':'Afroamericano',
+    '3':'Asiático',
+}
+
 
 
 db.define_table('perfil',

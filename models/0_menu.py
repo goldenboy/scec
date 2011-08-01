@@ -31,16 +31,16 @@ response.menu = [
 response.menu += [
     ('Personal', False, '#', 
         [
-            ('Perfil', False, URL('default','index'), 
-                [
-                    ('Datos Basicos', False, URL('perfil','index'), [])
-                ]),
+            ('Perfil', False, URL('perfil','index'), []),
         ])
     ]
 
 
 response.menu += [
-    ('Inscripcion', False, URL('default','index'), [])
+    ('Inscripcion', False, URL('default','index'), 
+        [
+            ('Cargar Estado Cuenta', False, URL('default','index'), [])
+        ])
     ]
 
 
