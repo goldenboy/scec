@@ -1,3 +1,4 @@
 databases/*
 sessions/*
 errors/*
+uploads/*
