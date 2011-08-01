@@ -1,20 +1,6 @@
 
 {{extend 'layout.html'}}
 
-    {{ if presentacion_perfil=='form': }}
-        {{ =perfil }}
-    {{ pass }}
-
-
-    {{ if presentacion_socio_e=='form': }}
-        {{ =socio_e }}
-    {{ pass }}
-
-
-
-
-
-    {{ if presentacion_perfil=='vista': }}
     <table>
         <tr>
             <td>Nombre:</td>
@@ -22,22 +8,4 @@
         </tr>
     </table>
     {{ =A('Actualizar datos Basicos', _href=URL('update', args=['perfil']), _class='button' ) }}
-    {{ pass #if }}
-
-
-
-
-    {{ if presentacion_socio_e=='vista': }}
-    <table>
-        <tr>
-            <td>dato x:</td>
-            <td>{{ =socio_e.dato_x }}</td>
-        </tr>
-    </table>
-    {{ =A('Actualizar datos Socio Economicos', _href=URL('update', args=['socio_e']), _class='button' ) }}
-    {{ pass #if }}
-
-
-
-
 
