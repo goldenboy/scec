@@ -90,6 +90,7 @@ def setup():
         auth.add_group('control_estudio')
         auth.add_group('autoridad')
         auth.add_group('admin')
+        auth.add_group('visitante')
         #-----------
         
         #registra al administrador

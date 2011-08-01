@@ -21,15 +21,28 @@ response.meta.copyright = ''
 ##########################################
 
 response.menu = [
-    ('Home', False, URL('default','index'), [])
+    ('Home/Noticias', False, URL('default','index'), [])
     ]
+
+_perfil_dato_basico = ('Datos Basicos', False, URL('default','index'), [])
+_perfil_se = ('Dato Socio Economico', False, URL('default','index'), [])
+
 
 response.menu += [
     ('Personal', False, '#', 
         [
-            ('Perfil', False, URL('default','index'), []),
-            ('Dato Socio Economico', False, URL('default','index'), []),
-            ('Rol', False, URL('default','index'), [])
+            ('Perfil', False, URL('default','index'), [_perfil_dato_basico, _perfil_se]),
         ])
     ]
+
+
+response.menu += [
+    ('Inscripcion', False, URL('default','index'), [])
+    ]
+
+
+response.menu += [
+    ('Inscripcion', False, URL('default','index'), [])
+    ]
+
 

@@ -94,7 +94,7 @@ db.auth_user.last_name.writable=False
 auth.settings.create_user_groups = False
 
 
-auth.settings.register_onaccept = lambda x: auth.add_membership('bachiller', id_user)
+auth.settings.register_onaccept = lambda x: auth.add_membership('visitante', id_user)
 
 auth.settings.register_next = URL('default','user', args=['profile'])
 
