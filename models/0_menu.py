@@ -24,4 +24,12 @@ response.menu = [
     ('Home', False, URL('default','index'), [])
     ]
 
+response.menu += [
+    ('Personal', False, '#', 
+        [
+            ('Perfil', False, URL('default','index'), []),
+            ('Dato Socio Economico', False, URL('default','index'), []),
+            ('Rol', False, URL('default','index'), [])
+        ])
+    ]
 
