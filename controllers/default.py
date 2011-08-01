@@ -14,7 +14,14 @@ def index():
     example action using the internationalization operator T and flash
     rendered by views/default/index.html or views/generic.html
     """
-    return dict(message=T('Hello World'))
+
+    facebook = '<script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>'
+    facebook +='<fb:activity site="http://www.facebook.com/#!/fundaodontologia" width="890"'
+    facebook +='height="500" header="false" font="arial" border_color="" recommendations="false"></fb:activity>'
+
+    facebook = None
+
+    return dict(facebook=XML(facebook))
 
 def user():
     """

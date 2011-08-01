@@ -1,24 +1,6 @@
 {{extend 'layout.html'}}
 
-
-
-<table>
-    <tr>
-        <td>
-            {{=form}}
-            <br/>
-        </td>
-    {{ if form_perfil: }}
-        <td>
-                {{ =form_perfil }}
-        </td>
-     {{ pass }}
-    </tr>
-
-</table>
-
-
-
+    {{=form}}
 
 {{if request.args(0)=='login':}}
 {{if not 'register' in auth.settings.actions_disabled:}}

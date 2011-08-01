@@ -1,0 +1,20 @@
+(dp1
+S'output'
+p2
+S''
+sS'layer'
+p3
+S'/home/diazluis2007/web2py/applications/scec/controllers/perfil.py'
+p4
+sS'code'
+p5
+S"# -*- coding: utf-8 -*-\n\ndef index():\n\n\n    perfil = db(db.perfil.user == id_user).select()\n    socio_e = db(db.socio_e.user == id_user).select()\n\n    if len(perfil)>0:\n        perfil = SQLTABLE(db.perfil, perfil[0].id)\n    else:\n        perfil_id = db.perfil.insert(user=id_user)\n        perfil = crud.update(db.perfil, perfil_id)\n\n    if len(socio_e)>0:\n        socio_e = SQLTABLE(db.socio_e, socio_e[0].id)\n    else:\n        socio_id = db.socio_e.insert(user=id_user)\n        socio_e = crud.update(db.socio_e, socio_id)\n\n\n    return dict(perfil=perfil, socio_e=socio_e)\n\n\n\ndef update():\n\n    perfil = db(db.perfil.user==id_user).select()\n\n    if len(perfil)==0:\n        perfil_id = db.perfil.insert(user=id_user)\n    else:\n        perfil_id = perfil[0].id\n\n    form_perfil = crud.update(db.perfil, perfil_id, deletable=False, next=URL('index'))\n    field_auth = db.auth_user\n    field_auth.email.writable = False\n    form = crud.update(field_auth, id_user)\n\n    return dict(form=auth(), form_perfil=form_perfil)\n\nresponse._vars=response._caller(index)\n"
+p6
+sS'snapshot'
+p7
+(dp8
+sS'traceback'
+p9
+S'Traceback (most recent call last):\n  File "/home/diazluis2007/web2py/gluon/restricted.py", line 192, in restricted\n    exec ccode in environment\n  File "/home/diazluis2007/web2py/applications/scec/controllers/perfil.py", line 42, in <module>\n  File "/home/diazluis2007/web2py/gluon/globals.py", line 137, in <lambda>\n    self._caller = lambda f: f()\n  File "/home/diazluis2007/web2py/applications/scec/controllers/perfil.py", line 10, in index\n    perfil = SQLTABLE(db.perfil, perfil[0].id)\n  File "/home/diazluis2007/web2py/gluon/sqlhtml.py", line 1329, in __init__\n    columns = sqlrows.colnames\n  File "/home/diazluis2007/web2py/gluon/dal.py", line 4648, in __getattr__\n    return self[key]\n  File "/home/diazluis2007/web2py/gluon/dal.py", line 4592, in __getitem__\n    return dict.__getitem__(self, str(key))\nKeyError: \'colnames\'\n'
+p10
+s.

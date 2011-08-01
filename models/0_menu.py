@@ -24,14 +24,17 @@ response.menu = [
     ('Home/Noticias', False, URL('default','index'), [])
     ]
 
-_perfil_dato_basico = ('Datos Basicos', False, URL('default','index'), [])
-_perfil_se = ('Dato Socio Economico', False, URL('default','index'), [])
+
+
 
 
 response.menu += [
     ('Personal', False, '#', 
         [
-            ('Perfil', False, URL('default','index'), [_perfil_dato_basico, _perfil_se]),
+            ('Perfil', False, URL('default','index'), 
+                [
+                    ('Datos Basicos', False, URL('perfil','index'), [])
+                ]),
         ])
     ]
 
