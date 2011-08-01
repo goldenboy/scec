@@ -13,6 +13,7 @@ db.define_table('archivo_cuenta',
     Field('descripcion', 'string', length=512),
     Field('archivo', 'upload', autodelete=True),
     Field('fecha_reg', 'date', default=request.now, writable=False, readable=False),
+    Field('md5', 'string', length=512, update = md5_hash(archivo) ),
     Field('user', db.auth_user, default=id_user, writable=False, readable=False),
     format = '%(fecha_reg)s - %(descripcion)s'
 )

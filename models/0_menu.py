@@ -37,9 +37,9 @@ response.menu += [
 
 
 response.menu += [
-    ('Inscripcion', False, URL('default','index'), 
+    ('Estado Cuenta', False, URL('archivo','index'), 
         [
-            ('Cargar Estado Cuenta', False, URL('default','index'), [])
+            ('Cargar', False, URL('archivo','upload_archivo_cuenta'), [])
         ])
     ]
 

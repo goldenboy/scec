@@ -17,10 +17,10 @@ def index():
 def update():
 
     perfil = db(db.perfil.user==id_user).select()[0]
-    perfil = crud.update(db.perfil, perfil.id, deletable=False, next=URL('index'))
+    form = crud.update(db.perfil, perfil.id, deletable=False, next=URL('index'))
 
 
-    return dict(perfil = perfil)
+    return dict(form = form)
 
 
 
