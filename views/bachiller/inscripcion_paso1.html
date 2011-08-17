@@ -1,0 +1,69 @@
+
+{{extend 'layout.html'}}
+
+    <h4>Carga de la data Base de los bachilleres asignados segun modalidad</h4>
+
+
+    {{ =form }}
+<br/>
+
+<table>
+<tr><td id="ayuda_header">Ayuda (click aqui)</td></tr>
+<tr><td id="ayuda_contenido">
+<p>
+    La data para cargar debe tener la siguiente estructura:
+
+    <ul>
+        <li>cedula de identidad (solo numer, sin puntos)</li>
+        <li>primer nombre</li>
+        <li>primer apellido</li>
+        <li>segundo nombre</li>
+        <li>segundo apellido</li>
+        <li>codigo de carrera</li>
+        <li>codigo de modalidad de ingreso</li>
+    </ul>
+    <p>
+        <br/>
+        Cada dato deben estar encerrado entre comillas dobles ( " " )
+        separado entre comas ( , )
+        y al final de la linea un salto normal de linea (un simple enter)
+        ejemplo:
+
+        <br/><br/>
+        "2222222","maria", "rodriguez", "valentina", "perez", "613", "2" <br/>
+        "5555555","pedro", "pereira", "alexander", "colmenares", "613", "2"
+
+        <br/><br/>
+
+        Este formato de datos se consigue exportado la hoja de excel sin ningun tipo de cabezera de datos a formato csv,<br/>
+        y en las columnas donde los datos son numericos, se deben selecinar y en propiedades de celda colocar tipo
+        de datos de texto
+    </p>
+
+
+</p>
+
+    <br/>
+    Donde los codigos del ejemplo corresponde a: 
+
+     {{ =carrera }}
+     {{ =modalidad_ingreso }}
+
+
+</td></tr>
+</table>
+
+<script>
+
+    $('#ayuda_contenido').hide();
+
+    $('#ayuda_header').click(function(){
+        $('#ayuda_contenido').toggle();
+    })
+
+</script>
+
+
+
+
+

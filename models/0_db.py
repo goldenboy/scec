@@ -80,7 +80,7 @@ crud.settings.auth = None        # =auth to enforce authorization on crud
 ## >>> for row in rows: print row.id, row.myfield
 #########################################################################
 
-auth.settings.actions_disabled = ['profile']
+auth.settings.actions_disabled = ['register']
 
 
 id_user = (auth.user and auth.user.id) or None
@@ -91,16 +91,9 @@ db.auth_user.first_name.writable=False
 db.auth_user.last_name.readable=False
 db.auth_user.last_name.writable=False
 
-auth.settings.create_user_groups = False
 
-
-auth.settings.register_onaccept = lambda x: auth.add_membership('visitante', id_user)
 
 auth.settings.register_next = URL('default','user', args=['profile'])
-
-
-
-
 
 
 

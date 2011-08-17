@@ -25,27 +25,12 @@ response.menu = [
     ]
 
 
-
-
-
-response.menu += [
-    ('Personal', False, '#', 
-        [
-            ('Perfil', False, URL('perfil','index'), []),
-        ])
-    ]
-
-
-response.menu += [
-    ('Estado Cuenta', False, URL('archivo','index'), 
-        [
-            ('Cargar', False, URL('archivo','upload_archivo_cuenta'), [])
-        ])
-    ]
-
-
-response.menu += [
-    ('Inscripcion', False, URL('default','index'), [])
+if auth.has_membership('autoridad'):
+    response.menu += [
+        ('Bachiller', False, URL('bachiller','index'), 
+            [
+                ('Inscribir', False, URL('bachiller','inscripcion_paso1'), [])
+            ])
     ]
 
 
