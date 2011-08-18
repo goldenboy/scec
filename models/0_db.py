@@ -42,7 +42,7 @@ mail.settings.sender = 'you@gmail.com'         # your email
 mail.settings.login = 'username:password'      # your credentials or None
 
 auth.settings.hmac_key = '<your secret key>'   # before define_tables()
-auth.define_tables()                           # creates all needed tables
+auth.define_tables(username=True)                           # creates all needed tables
 auth.settings.mailer = mail                    # for user email verification
 auth.settings.registration_requires_verification = False
 auth.settings.registration_requires_approval = False
@@ -80,7 +80,7 @@ crud.settings.auth = None        # =auth to enforce authorization on crud
 ## >>> for row in rows: print row.id, row.myfield
 #########################################################################
 
-auth.settings.actions_disabled = ['register']
+auth.settings.actions_disabled = ['register','retrieve_username','request_reset_password']
 
 
 id_user = (auth.user and auth.user.id) or None

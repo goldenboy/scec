@@ -25,11 +25,11 @@ response.menu = [
     ]
 
 
-if auth.has_membership('autoridad'):
+if auth.has_membership('root'):
     response.menu += [
-        ('Bachiller', False, URL('bachiller','index'), 
+        ('Configuracion', False, URL('configuracion','index'), 
             [
-                ('Inscribir', False, URL('bachiller','inscripcion_paso1'), [])
+                ('Usuarios', False, URL('configuracion','usuario_index'), [])
             ])
     ]
 

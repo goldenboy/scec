@@ -84,7 +84,7 @@ def data():
 
 def setup():
 
-    dato_admin = db(db.auth_group.role=='admin').select()
+    dato_admin = db(db.auth_group.role=='root').select()
     
     if len(dato_admin)==0:
     
@@ -97,21 +97,21 @@ def setup():
         #-----------
 
         # crea todos los grupos de usuarios base
-        auth.add_group('bachiller')
+        auth.add_group('estudiante')
         auth.add_group('profesor')
         auth.add_group('control_estudio')
         auth.add_group('autoridad')
-        auth.add_group('admin')
+        auth.add_group('root')
         #-----------
         
         #registra al administrador
         my_crypt = CRYPT(key=auth.settings.hmac_key)
-        id_user = db.auth_user.insert(email='admin@scec.com', password=my_crypt('admin')[0])
+        id_user = db.auth_user.insert(username='root', password=my_crypt('root')[0])
         #-----------
 
 
-        #agrega al administrador al grupo admin
-        auth.add_membership('admin', id_user)
+        #agrega al administrador al grupo root
+        auth.add_membership('root', id_user)
         db(db.auth_membership.user_id!=id_user).delete()
         #-----------
 

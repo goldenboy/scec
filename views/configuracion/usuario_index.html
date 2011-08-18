@@ -1,0 +1,28 @@
+
+{{extend 'layout.html'}}
+
+    <table>
+        <tr>
+            <td>CI/Pasaporte</td>
+            <td>Nombre</td>
+            <td>username</td>
+        </tr>
+    {{ for perfil in perfil_rows: }}
+        {{ user = db.auth_user[perfil.user] }}
+        <tr>
+            <td>{{ =perfil.di }}</td>
+            <td>{{ =perfil.nombre1 }}</td>
+            <td>{{ =user.username }}</td>
+            <td>
+                {{ if perfil.usuario_tipo: }}
+                    {{ for tipo in perfil.usuario_tipo: }}
+                        {{ =tipo }}
+                    {{ pass #for}}
+                {{ pass #if }}
+            </td>
+        </tr>
+    {{ pass }}
+
+    </table>
+
+

@@ -5,12 +5,13 @@ def index():
 
 
 
-def inscripcion_paso1():
+def add_1():
 
     
 
     form = SQLFORM.factory(
-                Field('data', 'text')
+                Field('data', 'text'),
+                db.bachiller_dato_plano.carrera, 
             )
     carrera_sql = db(db.carrera.id>0).select()
     carrera = SQLTABLE( carrera_sql, headers={'carrera.codigo':'Codigo','carrera.nombre':'Carrera'}, columns = ['carrera.codigo','carrera.nombre'] )
