@@ -37,9 +37,10 @@ crud = Crud(db)                                # for CRUD helpers using auth
 service = Service()                            # for json, xml, jsonrpc, xmlrpc, amfrpc
 plugins = PluginManager()                      # for configuring plugins
 
-mail.settings.server = 'logging' or 'smtp.gmail.com:587'  # your SMTP server
-mail.settings.sender = 'you@gmail.com'         # your email
-mail.settings.login = 'username:password'      # your credentials or None
+#mail.settings.server = 'logging' or 'smtp.gmail.com:587'  # your SMTP server
+mail.settings.server = 'smtp.gmail.com:587'  # your SMTP server
+mail.settings.sender = 'diazluis2007@gmail.com'         # your email
+mail.settings.login = 'diazluis2007:luis3429dm7'      # your credentials or None
 
 auth.settings.hmac_key = '<your secret key>'   # before define_tables()
 auth.define_tables(username=True)                           # creates all needed tables
@@ -92,22 +93,27 @@ db.auth_user.last_name.readable=False
 db.auth_user.last_name.writable=False
 
 
-
-auth.settings.register_next = URL('default','user', args=['profile'])
-
+auth.settings.registration_requires_approval = True
 
 
-db.define_table('pais',
-    Field('nombre', 'string', length=64),
-    format = '%(nombre)s'
-)
+def generar_codigo_seguridad(longitud=12):
+    from gluon.utils import web2py_uuid
+    codigo = web2py_uuid()
+    return codigo[:int(longitud)]
 
 
 
-db.define_table('estado', #estado o region del pais
-    Field('nombre', 'string', length=64),
-    format='%(nombre)s'
-)
+
+
+
+
+
+
+
+
+
+
+
 
 
 

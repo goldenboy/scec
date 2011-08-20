@@ -17,3 +17,12 @@
  jQuery("#web2py_user_form input:visible:enabled:first").focus();
 //-->
 </script> 
+
+
+
+{{ if request.args(0)=='login': }}
+
+Si es primera vez en el sistema, ingresa aqui con tu codigo de seguridad
+{{ =A('Codigo Seguridad', _href=URL('codigo','index') ) }}
+
+{{ pass }}

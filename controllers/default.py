@@ -84,7 +84,7 @@ def data():
 
 def setup():
 
-    dato_admin = db(db.auth_group.role=='root').select()
+    dato_admin = db(db.auth_user.username=='root').select()
     
     if len(dato_admin)==0:
     
@@ -106,7 +106,7 @@ def setup():
         
         #registra al administrador
         my_crypt = CRYPT(key=auth.settings.hmac_key)
-        id_user = db.auth_user.insert(username='root', password=my_crypt('root')[0])
+        id_user = db.auth_user.insert(username='root', first_name='Root', password=my_crypt('root')[0])
         #-----------
 
 
@@ -121,6 +121,8 @@ def setup():
         response.flash = 'ya existe configuracion de admin'
 
     return dict()
+
+
 
 
 
