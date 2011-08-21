@@ -93,10 +93,11 @@ db.auth_user.last_name.readable=False
 db.auth_user.last_name.writable=False
 
 
+
 auth.settings.registration_requires_approval = True
 
 
-def generar_codigo_seguridad(longitud=12):
+def generar_codigo_seguridad(longitud=8):
     from gluon.utils import web2py_uuid
     codigo = web2py_uuid()
     return codigo[:int(longitud)]

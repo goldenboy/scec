@@ -3,16 +3,19 @@
 
     <table>
         <tr>
-            <td>CI/Pasaporte</td>
-            <td>Nombre</td>
-            <td>username</td>
-            <td>email</td>
-            <td>Codigo Seguridad</td>
-            <td>Tipo</td>
+            <th>ID</th>
+            <th>CI/Pasaporte</th>
+            <th>Nombre</th>
+            <th>username</th>
+            <th>email</th>
+            <th>Codigo Seguridad</th>
+            <th>Tipo</th>
+            <th>Status</th>
         </tr>
     {{ for perfil in perfil_rows: }}
         {{ user = db.auth_user[perfil.user] }}
         <tr>
+            <td>{{ =A(perfil.id, _href=URL('update', args=[perfil.user]) ) }}</td>
             <td>{{ =perfil.di }}</td>
             <td>{{ =user.first_name }}</td>
             <td>{{ =user.username }}</td>
@@ -25,6 +28,7 @@
                     {{ pass #for}}
                 {{ pass #if }}
             </td>
+            <td>{{ =_perfil_status[perfil.status] }}</td>
         </tr>
     {{ pass }}
 

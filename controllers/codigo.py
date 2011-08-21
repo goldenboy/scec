@@ -7,8 +7,8 @@ def index():
     form = SQLFORM.factory(
         Field('di', 'integer', label='CI o Pasaporte'),
         Field('codigo_seguridad', 'string', length=12),
-        Field('clave', 'string', length=32, label='Clave Nueva'),
-        Field('clave_2', 'string', length=32, label='Confirmar clave', requires=IS_EQUAL_TO(request.vars.clave_2)),
+        Field('clave', 'string', length=32, label='Clave Nueva', widget=SQLFORM.widgets.password.widget),
+        Field('clave_2', 'string', length=32, label='Confirmar clave', requires=IS_EQUAL_TO(request.vars.clave_2), widget=SQLFORM.widgets.password.widget),
     )
 
     if form.accepts(request.vars, session):

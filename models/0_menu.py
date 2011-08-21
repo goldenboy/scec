@@ -33,6 +33,8 @@ if auth.has_membership('root') or auth.has_membership('control_estudio'):
             ])
     ]
 
+
+
 if auth.has_membership('root'):
     response.menu += [
         ('Autoridad', False, URL('autoridad','index'), 
@@ -41,3 +43,11 @@ if auth.has_membership('root'):
             ])
     ]
 
+
+if auth.has_membership('root') or auth.has_membership('control_estudio'):
+    response.menu += [
+        ('Estudiantes', False, URL('estudiante','index'), 
+            [
+                ('Inscribir', False, URL('estudiante','add'), [])
+            ])
+    ]

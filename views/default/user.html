@@ -21,8 +21,7 @@
 
 
 {{ if request.args(0)=='login': }}
-
-Si es primera vez en el sistema, ingresa aqui con tu codigo de seguridad
-{{ =A('Codigo Seguridad', _href=URL('codigo','index') ) }}
-
+<h4>
+Si es primera vez en el sistema, ingresa aqui el {{ =A('Codigo Seguridad', _href=URL('codigo','index') ) }}
+</h4>
 {{ pass }}
