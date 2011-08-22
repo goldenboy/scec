@@ -20,17 +20,22 @@ def index():
     facebook +='height="500" header="false" font="arial" border_color="" recommendations="false"></fb:activity>'
 
     #chequeo de estatus
-    encontrado = db(db.perfil.user==id_user)(db.perfil.status=='b').select().first()
-    if encontrado:
-        facebook = 'Su Cuenta de usuario esta Bloqueada'
-        redirect(URL('default','user',args=['logout']))
+    if auth.is_logged_in():
+        perfil = db(db.perfil.user==id_user).select().first()
+
+        if perfil.status == 'b':
+            facebook = 'Su Cuenta de usuario esta Bloqueada'
+            redirect(URL('default','user',args=['logout']))
+
+        if 'e' in perfil.tipo:
+            if perfil.proceso in '1': #inscripcion
+                redirect (URL('incripcion','index'))
+
+    
 
 
-    facebook = None
 
-
-
-    return dict(facebook=XML(facebook))
+    return dict(facebook=facebook)
 
 def user():
     """
@@ -114,6 +119,7 @@ def setup():
         #registra al administrador
         my_crypt = CRYPT(key=auth.settings.hmac_key)
         id_user = db.auth_user.insert(username='root', first_name='Root', password=my_crypt('root')[0])
+        db.perfil.insert(user=id_user, tipo='r')
         #-----------
 
 

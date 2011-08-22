@@ -29,6 +29,11 @@ _perfil_status = {
     'b':'Bloqueado'
 }
 
+_perfil_proceso = {
+    '1':'Iscripcion',
+    '2':'Ratificacion',
+    '3':'Muchos mas'
+}
 
 db.define_table('perfil',
     Field('codigo_seguridad', 'string', default= generar_codigo_seguridad, writable=False, readable=False),
@@ -48,6 +53,7 @@ db.define_table('perfil',
     Field('fecha_reg', 'date', default=request.now, writable=False, readable=False),
     Field('tipo', 'list:string', writable=False, readable=False),
     Field('status', 'string', length=1, default='a', writable=False, readable=False),
+    Field('proceso', 'list:integer', writable=False, readable=False),
     Field('user', db.auth_user, default=id_user, writable=False, readable=False),
 )
 

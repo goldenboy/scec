@@ -44,7 +44,7 @@ if auth.has_membership('root'):
     ]
 
 
-if auth.has_membership('root') or auth.has_membership('control_estudio'):
+if auth.has_membership('control_estudio') or auth.has_membership('autoridad'):
     response.menu += [
         ('Estudiantes', False, URL('estudiante','index'), 
             [
