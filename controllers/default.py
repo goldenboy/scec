@@ -27,13 +27,12 @@ def index():
             facebook = 'Su Cuenta de usuario esta Bloqueada'
             redirect(URL('default','user',args=['logout']))
 
-        if 'e' in perfil.tipo:
-            if perfil.proceso in '1': #inscripcion
+        if perfil.tipo in [2]: # si se trata de un estudiante
+            if perfil.proceso in [1]: #inscripcion
                 redirect (URL('incripcion','index'))
 
     
-
-
+    facebook = None
 
     return dict(facebook=facebook)
 
@@ -109,17 +108,18 @@ def setup():
         #-----------
 
         # crea todos los grupos de usuarios base
+        auth.add_group('root')
         auth.add_group('estudiante')
         auth.add_group('profesor')
         auth.add_group('control_estudio')
-        auth.add_group('autoridad')
-        auth.add_group('root')
+        auth.add_group('director')
+        auth.add_group('decano')
         #-----------
         
         #registra al administrador
         my_crypt = CRYPT(key=auth.settings.hmac_key)
         id_user = db.auth_user.insert(username='root', first_name='Root', password=my_crypt('root')[0])
-        db.perfil.insert(user=id_user, tipo='r')
+        db.perfil.insert(user=id_user, tipo=1)
         #-----------
 
 
@@ -127,6 +127,11 @@ def setup():
         auth.add_membership('root', id_user)
         db(db.auth_membership.user_id!=id_user).delete()
         #-----------
+
+        # agerga un pais y un estado
+        db.pais.insert(nombre='Venezuela')
+        db.estado.insert(nombre='Fuera de Venezuela')
+        db.estado.insert(nombre='Carabobo')
 
 
         response.flash = 'Configuracion de admin realizada'

@@ -16,11 +16,13 @@ _sexo = {
 
 
 _perfil_tipo = {
-    'e':'Estudiante',
-    'p':'Profesor',
-    'c':'Control Estudio',
-    'a':'Autoridad',
-    'r':'root'
+    1:'root',
+    2:'Estudiante',
+    3:'Profesor',
+    4:'Personal de Control Estudio',
+    5:'Director(a)',
+    6:'Decano(a)',
+
 }
 
 
@@ -30,9 +32,9 @@ _perfil_status = {
 }
 
 _perfil_proceso = {
-    '1':'Iscripcion',
-    '2':'Ratificacion',
-    '3':'Muchos mas'
+    1:'Iscripcion',
+    2:'Ratificacion',
+    3:'Muchos mas'
 }
 
 db.define_table('perfil',
@@ -51,9 +53,10 @@ db.define_table('perfil',
     Field('tlf_fijo', 'string', length=64 ),
     Field('tlf_movil', 'string', length=64),
     Field('fecha_reg', 'date', default=request.now, writable=False, readable=False),
-    Field('tipo', 'list:string', writable=False, readable=False),
+    Field('tipo', 'list:integer', writable=False, readable=False),
     Field('status', 'string', length=1, default='a', writable=False, readable=False),
     Field('proceso', 'list:integer', writable=False, readable=False),
+    Field('autorizado', 'list:integer'), # id de todos los usuarios que deben autorizar el ingreso de este usuario
     Field('user', db.auth_user, default=id_user, writable=False, readable=False),
 )
 
