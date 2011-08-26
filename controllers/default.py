@@ -24,12 +24,10 @@ def index():
         perfil = db(db.perfil.user==id_user).select().first()
 
         if perfil.status == 'b':
-            facebook = 'Su Cuenta de usuario esta Bloqueada'
+            facebook = '<h1>Su Cuenta de usuario esta Bloqueada</h1>'
             redirect(URL('default','user',args=['logout']))
 
-        if perfil.tipo in [2]: # si se trata de un estudiante
-            if perfil.proceso in [1]: #inscripcion
-                redirect (URL('incripcion','index'))
+
 
     
     facebook = None
@@ -105,21 +103,26 @@ def setup():
         db(db.auth_membership.id>0).delete()
         db(db.auth_permission.id>0).delete()
         db(db.auth_event.id>0).delete()
-        #-----------
+        db(db.pais.id>0).delete()
+        db(db.estado.id>0).delete()
 
+        #-----------
         # crea todos los grupos de usuarios base
         auth.add_group('root')
+        auth.add_group('tecnico_control_estudio')
+        auth.add_group('director_control_estudio')
+        auth.add_group('director_escuela')
+
+        auth.add_group('personal_control_estudio')
         auth.add_group('estudiante')
         auth.add_group('profesor')
-        auth.add_group('control_estudio')
-        auth.add_group('director')
-        auth.add_group('decano')
+        auth.add_group('coordinador_asignatura')
         #-----------
         
         #registra al administrador
         my_crypt = CRYPT(key=auth.settings.hmac_key)
         id_user = db.auth_user.insert(username='root', first_name='Root', password=my_crypt('root')[0])
-        db.perfil.insert(user=id_user, tipo=1)
+        db.perfil.insert(user=id_user, tipo=1, status='a')
         #-----------
 
 

@@ -13,13 +13,13 @@ def index():
 
     if form.accepts(request.vars, session):
 
-        encontrado = db(db.perfil.di==request.vars.di)(db.perfil.codigo_seguridad==request.vars.codigo_seguridad).select().first()
+        _encontrado = db(db.perfil.di==request.vars.di)(db.perfil.codigo_seguridad==request.vars.codigo_seguridad)(db.perfil.status=='c').select().first()
 
-        if encontrado:
+        if _encontrado:
             my_crypt = CRYPT(key=auth.settings.hmac_key)
-            db(db.auth_user.id == encontrado.user).update(registration_key='', password=my_crypt(request.vars.clave)[0])
+            db(db.auth_user.id == _encontrado.user).update(registration_key='', password=my_crypt(request.vars.clave)[0])
             session.flash = 'Contraseña Actualizada'
-            redirect (URL('default','user'))
+            form=auth()
         else:
             response.flash = 'Error sus datos no coinciden'    
 

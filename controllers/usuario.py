@@ -2,14 +2,26 @@
 
 
 
-@auth.requires( auth.has_membership('root') or auth.has_membership('control_estudio'))
+@auth.requires( auth.has_membership('root') or auth.has_membership('tecnico_control_estudio') )
 def index():
 
     if auth.has_membership('root'):
-        perfil_rows = db(db.perfil.tipo.contains('c') ).select(orderby=~db.perfil.id)
+        """ lista los siguiente usuarios:
+          * tecnico de control_estudio [2]
+          * Director de Control de Estudio [3]
+          * Director de Escuela [4]
+        """
+        perfil_rows = db(db.perfil.tipo.contains('2') | db.perfil.tipo.contains('3') |
+                         db.perfil.tipo.contains('4') ).select(orderby=~db.perfil.fecha_update)
 
-    if auth.has_membership('control_estudio'):
-        perfil_rows = db(db.perfil.tipo.contains('p')).select()
+    if auth.has_membership('tecnico_control_estudio'):
+        """ lista los siguiente usuarios:
+          * estudiante [6]
+          * profesor  [7]
+          * coordinador_asignatura [8]
+        """
+        perfil_rows = db(db.perfil.tipo.contains('6') | db.perfil.tipo.contains('7') |
+                         db.perfil.tipo.contains('8') ).select(orderby=~db.perfil.fecha_update)
 
     return dict(perfil_rows=perfil_rows)
 
@@ -18,17 +30,27 @@ def index():
 
 
 
-@auth.requires( auth.has_membership('root') or auth.has_membership('control_estudio'))
-def add():
+@auth.requires( auth.has_membership('root') or auth.has_membership('tecnico_control_estudio') )
+def upload():
+    
+    _tipo = {
+        0:'Seleccionar'
+    }
 
     error = ['Error los siguiente usuarios ya estan registrados']
     if auth.has_membership('root'):
-        role = 'control_estudio'
-        tipo = 'c'
+        _tipo = {
+            2:'tecnico_control_estudio',
+            3:'director_control_estudio',
+            4:'director_escuela'
+        }
 
-    elif auth.has_membership('control_estudio'):
-        role = 'profesor'
-        tipo = 'p'
+    if auth.has_membership('tecnico_control_estudio'):
+        _tipo = {
+            6:'estudiante',
+            7:'profesor', 
+            8:'coordinador_asignatura',
+        }
 
 
     form = SQLFORM.factory(
@@ -36,7 +58,7 @@ def add():
         Field('nombre', 'string', length=64),
         Field('email', 'string', length=128),
         Field('lote', 'text', length=2048),
-
+        Field('tipo', 'integer', requires=IS_IN_SET(_tipo, zero=None))
     )
 
     if form.accepts(request.vars, session):
@@ -44,66 +66,67 @@ def add():
         #my_crypt = CRYPT(key=auth.settings.hmac_key)
 
         if request.vars.lote:
-            dato_usuario_rows = request.vars.lote.split('\n')
-
-            for dato_usuario in dato_usuario_rows:
-                usuario_valor = dato_usuario.split('|')
-                usuario_valor_di = usuario_valor[0]
-                usuario_valor_nombre = usuario_valor[1]
-                usuario_valor_email = usuario_valor[2]
-                encontrado = db((db.auth_user.username==usuario_valor_di) | (db.auth_user.email==usuario_valor_email) ).select().first()
-
-                if encontrado:
-                    mensaje_error = 'DI: %s  Nombre: %s' % (usuario_valor_di, usuario_valor_nombre)
-                    error.append(mensaje_error)
-                else:
-                    usuario_id = db.auth_user.insert(username=usuario_valor_di, email=usuario_valor_email, first_name=usuario_valor_nombre, registration_key='pending')
-                    db.perfil.insert(di=usuario_valor_di, user=usuario_id, tipo=tipo)
-                    auth.add_membership(role, usuario_id)
+            pass
         else:
-            usuario_valor_di = request.vars.di
-            usuario_valor_nombre = request.vars.nombre
-            usuario_valor_email = request.vars.email
-            encontrado = db((db.auth_user.username==usuario_valor_di) | (db.auth_user.email==usuario_valor_email) ).select().first()
-            if encontrado:
-                mensaje_error = 'DI: %s  Nombre: %s' % (usuario_valor_di, usuario_valor_nombre)
+            _usuario_di = request.vars.di
+            _usuario_nombre = request.vars.nombre
+            _usuario_email = request.vars.email
+            _usuario_tipo = request.vars.tipo
+            _encontrado = db((db.auth_user.username==_usuario_di) | (db.auth_user.email==_usuario_email) ).select().first()
+            if _encontrado:
+                mensaje_error = 'DI: %s  Nombre: %s' % (_usuario_di, _usuario_nombre)
                 error.append(mensaje_error)
             else:
-                usuario_id = db.auth_user.insert(username=usuario_valor_di, email=usuario_valor_email, first_name=usuario_valor_nombre, registration_key='pending')
-                db.perfil.insert(di=usuario_valor_di, user=usuario_id, tipo=tipo)
-                auth.add_membership(role, usuario_id)
+                _usuario_id = db.auth_user.insert(username=_usuario_di, email=_usuario_email, first_name=_usuario_nombre, registration_key='pending')
+                _grupo_id = auth.add_group('user_%i' % int(_usuario_id))
+                auth.add_membership(request.vars.tipo, _usuario_id)
+                auth.add_membership(_grupo_id, _usuario_id)
+                db.perfil.insert(di=_usuario_di, user=_usuario_id, tipo=_usuario_tipo)
+
+                redirect (URL('index'))
 
 
     if len(error)>1:
         response.flash = error
+
     return dict(form=form)
 
 
 
 
-@auth.requires( auth.has_membership('root') or auth.has_membership('autoridad'))
-def update():
-    
-    response.view = 'usuario/add.html'
+def status():
 
-    perfil = db(db.perfil.user==request.args[0]).select().first()
     form = None
+    _usuario_user = request.vars.user
 
-    if perfil:
-        form = SQLFORM.factory(
-            Field('status', 'string', length=1, default=perfil.status, requires=IS_IN_SET(_perfil_status, zero=None)),
-            Field('codigo_seguridad', 'string', default=generar_codigo_seguridad),
-        )
-    else:
-        response.flash = 'Usuario no encontrado'
+    if auth.has_membership('root'):
+        _encontrado = db(db.perfil.user==_usuario_user)(db.perfil.tipo.contains('2') | 
+                                                        db.perfil.tipo.contains('3') |
+                                                        db.perfil.tipo.contains('4')).select().first()
 
-    if form.accepts(request.vars, session):
-        db(db.perfil.user==request.args[0]).update(status=request.vars.status, codigo_seguridad=request.vars.codigo_seguridad)
-        session.flash = 'Datos Actualizados'
-        redirect(URL('index'))
-    
+        if _encontrado:
+            form = SQLFORM.factory(
+                        Field('user', 'integer', default=_usuario_user, writable=False, readable=False),
+                        Field('status', 'string', length=1, default=_encontrado.status, requires=db.perfil.status.requires)
+                    )
+            if form.accepts(request.vars, session):
+
+                if request.vars.status == 'c':
+                    _codigo_seguridad = generar_codigo_seguridad()
+                    db(db.perfil.user==request.vars.user).update(status=request.vars.status, codigo_seguridad=_codigo_seguridad)
+                    db(db.auth_user.id==request.vars.user).update(registration_key='pending')
+                elif request.vars.status == 'b':
+                    db(db.perfil.user==request.vars.user).update(status=request.vars.status)
+                    db(db.auth_user.id==request.vars.user).update(registration_key='pending')
+                else: # 'a'
+                    db(db.perfil.user==request.vars.user).update(status='a')
+                    db(db.auth_user.id==request.vars.user).update(registration_key='')
+
+                session.flash = 'Status Actualizado'
+                redirect(URL('index'))
+
+              
     return dict(form=form)
-
 
 
 

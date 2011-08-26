@@ -25,29 +25,15 @@ response.menu = [
     ]
 
 
-if auth.has_membership('root') or auth.has_membership('control_estudio'):
+if auth.has_membership('root') or auth.has_membership('tecnico_control_estudio'):
     response.menu += [
         ('Usuarios', False, URL('usuario','index'), 
             [
-                ('Agregar', False, URL('usuario','add'), [])
+                ('Cargar', False, URL('usuario','upload'), [])
             ])
     ]
 
 
 
-if auth.has_membership('root'):
-    response.menu += [
-        ('Autoridad', False, URL('autoridad','index'), 
-            [
-                ('Agregar', False, URL('autoridad','add'), [])
-            ])
-    ]
 
 
-if auth.has_membership('control_estudio') or auth.has_membership('autoridad'):
-    response.menu += [
-        ('Estudiantes', False, URL('estudiante','index'), 
-            [
-                ('Inscribir', False, URL('estudiante','add'), [])
-            ])
-    ]
