@@ -5,14 +5,21 @@
 @auth.requires( auth.has_membership('root') or auth.has_membership('tecnico_control_estudio') )
 def index():
 
+    _usuario_tipo = request.vars.tipo
+
     if auth.has_membership('root'):
         """ lista los siguiente usuarios:
           * tecnico de control_estudio [2]
           * Director de Control de Estudio [3]
           * Director de Escuela [4]
         """
-        perfil_rows = db(db.perfil.tipo.contains('2') | db.perfil.tipo.contains('3') |
-                         db.perfil.tipo.contains('4') ).select(orderby=~db.perfil.fecha_update)
+#        perfil_rows = db(db.perfil.tipo.contains('2') | db.perfil.tipo.contains('3') |
+#                         db.perfil.tipo.contains('4') )(db.perfil.tipo==_usuario_tipo).select(orderby=~db.perfil.di)
+
+#        query = db(db.perfil).select()
+#        perfil_rows = query.find(lambda row: auth.has_membership(user_id=row.user, role='tecnico_control_estudio'))
+
+        perfil_rows = db(db.perfil.user==db.auth_membership.user_id)(db.auth_membership.group_id==auth.id_group('tecnico_control_estudio')).select()
 
     if auth.has_membership('tecnico_control_estudio'):
         """ lista los siguiente usuarios:
@@ -21,7 +28,7 @@ def index():
           * coordinador_asignatura [8]
         """
         perfil_rows = db(db.perfil.tipo.contains('6') | db.perfil.tipo.contains('7') |
-                         db.perfil.tipo.contains('8') ).select(orderby=~db.perfil.fecha_update)
+                         db.perfil.tipo.contains('8') )(db.perfil.tipo==_usuario_tipo).select(orderby=~db.perfil.di)
 
     return dict(perfil_rows=perfil_rows)
 
@@ -47,15 +54,16 @@ def upload():
 
     if auth.has_membership('tecnico_control_estudio'):
         _tipo = {
-            6:'estudiante',
-            7:'profesor', 
-            8:'coordinador_asignatura',
+            99:'Sin asignar',
         }
 
 
     form = SQLFORM.factory(
         Field('di', 'integer', label='CI/Pasaporte'),
-        Field('nombre', 'string', length=64),
+        Field('nombre1', 'string', length=64, label='Primer Nombre'),
+        Field('apellido1', 'string', length=64, label='Primer Apellido'),
+        Field('nombre2', 'string', length=64, label='Segundo Nombre'),
+        Field('apellido2', 'string', length=64, label='Segundo Apellido'),
         Field('email', 'string', length=128),
         Field('lote', 'text', length=2048),
         Field('tipo', 'integer', requires=IS_IN_SET(_tipo, zero=None))
@@ -65,7 +73,13 @@ def upload():
         
         #my_crypt = CRYPT(key=auth.settings.hmac_key)
 
+
+        
         if request.vars.lote:
+            _vector_usuario = request.vars.lote.split('\n')
+            for _usuario in _vector_usuario:
+                _usuario_di = _usuario[0]
+                
             pass
         else:
             _usuario_di = request.vars.di

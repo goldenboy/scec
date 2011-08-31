@@ -7,29 +7,8 @@
             <th>CI/Pasaporte</th>
             <th>Nombre</th>
             <th>email</th>
-            <th>Codigo Seguridad</th>
-            <th>Tipo</th>
-            <th>Status</th>
         </tr>
-    {{ for perfil in perfil_rows: }}
-        {{ user = db.auth_user[perfil.user] }}
-        <tr>
-            <td>{{ =perfil.id }}</td>
-            <td>{{ =perfil.di }}</td>
-            <td>{{ =user.first_name }}</td>
-            <td>{{ =user.email }}</td>
-            <td>{{ =perfil.codigo_seguridad }}</td>
-            <td>
-                {{ if perfil.tipo: }}
-                    {{ for tipo in perfil.tipo: }}
-                        {{ =_perfil_tipo[tipo] }}
-                    {{ pass #for}}
-                {{ pass #if }}
-            </td>
-            <td>{{ =A(_perfil_status[perfil.status], _href=URL('status', vars={'user':perfil.user}) ) }}</td>
-        </tr>
-    {{ pass }}
-
+{{ =perfil_rows }}
     </table>
 
 

@@ -18,6 +18,7 @@ def index():
         if _encontrado:
             my_crypt = CRYPT(key=auth.settings.hmac_key)
             db(db.auth_user.id == _encontrado.user).update(registration_key='', password=my_crypt(request.vars.clave)[0])
+            db(db.perfil.user == _encontrado.user).update(status='a')
             session.flash = 'Contraseña Actualizada'
             form=auth()
         else:

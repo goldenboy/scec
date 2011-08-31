@@ -82,7 +82,7 @@ crud.settings.auth = None        # =auth to enforce authorization on crud
 #########################################################################
 
 auth.settings.actions_disabled = ['register','retrieve_username','request_reset_password']
-
+auth.settings.create_user_groups = False
 
 id_user = (auth.user and auth.user.id) or None
 
@@ -92,7 +92,13 @@ db.auth_user.first_name.writable=False
 db.auth_user.last_name.readable=False
 db.auth_user.last_name.writable=False
 
+db.auth_user.username.label='CI/Pasaporte'
+db.auth_user.username.requires = [
+    IS_INT_IN_RANGE(999999, 99999999),
+    IS_NOT_IN_DB(db, 'auth_user.username')
+]
 
+db.auth_user.format = '%(username)s'
 
 auth.settings.registration_requires_approval = True
 
@@ -105,6 +111,10 @@ def generar_codigo_seguridad(longitud=8):
 
 
 
+_requires_nombre_apellido = [
+    IS_LENGTH(minsize=3),
+    IS_NOT_EMPTY()
+]
 
 
 

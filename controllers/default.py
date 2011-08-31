@@ -21,9 +21,9 @@ def index():
 
     #chequeo de estatus
     if auth.is_logged_in():
-        perfil = db(db.perfil.user==id_user).select().first()
+        _acceso = db(db.acceso.user==id_user).select().first()
 
-        if perfil.status == 'b':
+        if _acceso.status == 'b':
             facebook = '<h1>Su Cuenta de usuario esta Bloqueada</h1>'
             redirect(URL('default','user',args=['logout']))
 
@@ -117,12 +117,13 @@ def setup():
         auth.add_group('estudiante')
         auth.add_group('profesor')
         auth.add_group('coordinador_asignatura')
+        auth.add_group('sin_asignar')
         #-----------
         
         #registra al administrador
         my_crypt = CRYPT(key=auth.settings.hmac_key)
         id_user = db.auth_user.insert(username='root', first_name='Root', password=my_crypt('root')[0])
-        db.perfil.insert(user=id_user, tipo=1, status='a')
+        db.acceso.insert(user=id_user, nivel=1, status='a')
         #-----------
 
 

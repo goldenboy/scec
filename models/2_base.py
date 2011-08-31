@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+
+
 db.define_table('pais',
     Field('nombre', 'string', length=64),
     format = '%(nombre)s'

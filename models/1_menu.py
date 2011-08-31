@@ -27,8 +27,9 @@ response.menu = [
 
 if auth.has_membership('root') or auth.has_membership('tecnico_control_estudio'):
     response.menu += [
-        ('Usuarios', False, URL('usuario','index'), 
+        ('Usuarios', False, URL('usuario','index', vars={'tipo':99}), 
             [
+                ('Estudiantes', False, URL('usuario','index', vars={'tipo':6}), []),
                 ('Cargar', False, URL('usuario','upload'), [])
             ])
     ]
