@@ -3,12 +3,18 @@
 
     <table>
         <tr>
-            <th>ID</th>
             <th>CI/Pasaporte</th>
             <th>Nombre</th>
             <th>email</th>
         </tr>
-{{ =perfil_rows }}
+
+        {{ for perfil in perfil_rows: }}
+        <tr>
+            <th>{{ =perfil.user.username }}</th>
+            <th>{{ =perfil.nombre1 }}</th>
+            <th>{{ =perfil.user.email }}</th>
+        </tr>
+        {{ pass }}
     </table>
 
 

@@ -103,6 +103,21 @@ db.auth_user.format = '%(username)s'
 auth.settings.registration_requires_approval = True
 
 
+"""
+    Grupos del sistema
+    ##################
+    root > creado por el sistema
+    tecnico_control_estudio > cargado y asignado por root
+    director_control_estudio > asignado por root (root activa o bloquea)
+    director_escuela > asignado por root ademas de activa o bloquea
+
+    personal_control_estudio > asignado por director control de estudios ademas de activa o bloquear 
+    estudiante > asignado por director_control_estudio, (tecnico activa o bloquea)
+    profesor > asignado por director_control_estudio (tecnico activa o bloquea)
+    coordinador_asignatura > asignado por director_control_estudio (tecnico activa o bloquea)
+    sin asignar > todo usuario cuando es cargado en el sistema
+"""
+
 def generar_codigo_seguridad(longitud=8):
     from gluon.utils import web2py_uuid
     codigo = web2py_uuid()

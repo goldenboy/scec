@@ -16,10 +16,9 @@ def index():
 #        perfil_rows = db(db.perfil.tipo.contains('2') | db.perfil.tipo.contains('3') |
 #                         db.perfil.tipo.contains('4') )(db.perfil.tipo==_usuario_tipo).select(orderby=~db.perfil.di)
 
-#        query = db(db.perfil).select()
-#        perfil_rows = query.find(lambda row: auth.has_membership(user_id=row.user, role='tecnico_control_estudio'))
-
-        perfil_rows = db(db.perfil.user==db.auth_membership.user_id)(db.auth_membership.group_id==auth.id_group('tecnico_control_estudio')).select()
+        perfil_rows = db(db.perfil.user==db.auth_membership.user_id)(db.auth_membership.group_id==auth.id_group('tecnico_control_estudio') or 
+                                                                    db.auth_membership.group_id==auth.id_group('director_control_estudio') or 
+                                                                    db.auth_membership.group_id==auth.id_group('director_escuela')).select()
 
     if auth.has_membership('tecnico_control_estudio'):
         """ lista los siguiente usuarios:
@@ -27,8 +26,9 @@ def index():
           * profesor  [7]
           * coordinador_asignatura [8]
         """
-        perfil_rows = db(db.perfil.tipo.contains('6') | db.perfil.tipo.contains('7') |
-                         db.perfil.tipo.contains('8') )(db.perfil.tipo==_usuario_tipo).select(orderby=~db.perfil.di)
+        perfil_rows = db(db.perfil.user==db.auth_membership.user_id)(db.auth_membership.group_id==auth.id_group('estudiante') or 
+                                                                    db.auth_membership.group_id==auth.id_group('profesor') or 
+                                                                    db.auth_membership.group_id==auth.id_group('coordinador_asignatura')).select()
 
     return dict(perfil_rows=perfil_rows)
 
