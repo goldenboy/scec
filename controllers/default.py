@@ -19,13 +19,7 @@ def index():
     facebook +='<fb:activity site="http://www.facebook.com/#!/fundaodontologia" width="890"'
     facebook +='height="500" header="false" font="arial" border_color="" recommendations="false"></fb:activity>'
 
-    #chequeo de estatus
-    if auth.is_logged_in():
-        _acceso = db(db.acceso.user==id_user).select().first()
 
-        if _acceso.status == 'b':
-            facebook = '<h1>Su Cuenta de usuario esta Bloqueada</h1>'
-            redirect(URL('default','user',args=['logout']))
 
 
 

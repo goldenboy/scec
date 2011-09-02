@@ -17,6 +17,7 @@ _sexo = {
 
 
 db.define_table('perfil',
+    Field('di', 'string', length=64, writable=False, readable=False),
     Field('nombre1', 'string', length=64),
     Field('apellido1', 'string', length=64),
     Field('nombre2', 'string', length=64),

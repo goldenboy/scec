@@ -83,6 +83,10 @@ crud.settings.auth = None        # =auth to enforce authorization on crud
 
 auth.settings.actions_disabled = ['register','retrieve_username','request_reset_password']
 auth.settings.create_user_groups = False
+auth.settings.registration_requires_approval = True
+
+auth.messages.registration_pending = 'Cuenta sin Activar'
+auth.messages.logged_in = 'Bienvenido'
 
 id_user = (auth.user and auth.user.id) or None
 
@@ -100,7 +104,8 @@ db.auth_user.username.requires = [
 
 db.auth_user.format = '%(username)s'
 
-auth.settings.registration_requires_approval = True
+
+
 
 
 """
@@ -118,11 +123,36 @@ auth.settings.registration_requires_approval = True
     sin asignar > todo usuario cuando es cargado en el sistema
 """
 
+_usuario_grupo = {
+    '1':'root', #creado por el sistema 
+    '2':'tecnico_control_estudio', # cargado y asignado por root
+    '3':'director_control_estudio', # asignado por root (root activa o bloquea)
+    '4':'director_escuela', # asignado por root ademas de activa o bloquea
+
+    '5':'personal_control_estudio', # asignado por director control de estudios ademas de activa o bloquear 
+    '6':'estudiante', # asignado por director_control_estudio, (tecnico activa o bloquea)
+    '7':'profesor', # asignado por director_control_estudio (tecnico activa o bloquea)
+    '8':'coordinador_asignatura', # asignado por director_control_estudio (tecnico activa o bloquea)
+    '99':'sin_asignar'
+}
+
 def generar_codigo_seguridad(longitud=8):
     from gluon.utils import web2py_uuid
     codigo = web2py_uuid()
     return codigo[:int(longitud)]
 
+
+def es_integrante_grupo(user, lista_grupo):
+
+    grupo_rows = db(db.auth_membership.user_id==user).select()
+
+    pertenece = False
+    for grupo in grupo_rows:
+        if grupo.group_id.role in lista_grupo:
+            pertenece = True
+            break
+        
+    return pertenece
 
 
 
