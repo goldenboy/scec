@@ -1,0 +1,43 @@
+
+{{extend 'layout.html'}}
+
+    <table>
+        <tr>
+            <th>CI/Pasaporte</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Email</th>
+            <th>Tlf fijo</th>
+            <th>Tlf movil</th>
+            <th>Codigo Seguridad</th>
+            <th>Status</th>
+            <th>Permiso</th>
+        </tr>
+        {{ for row in perfil_rows: }}
+        <tr>
+            <td>{{ =row.perfil.di }}</td>
+            <td>{{ =row.perfil.nombre1 }}</td>
+            <td>{{ =row.perfil.apellido1 }}</td>
+            <td>{{ =row.perfil.user.email }}</td>
+            <td>{{ =row.perfil.tlf_fijo }}</td>
+            <td>{{ =row.perfil.tlf_movil }}</td>
+            <td>{{ if row.acceso.codigo_seguridad: }}
+                   {{ =row.acceso.codigo_seguridad }}
+                {{ else: }}
+                   ---
+                {{ pass }}
+            </td>
+            <td>{{ =A(_acceso_status[row.acceso.status], _href=URL('status',args=[row.perfil.user]), _class='button') }}</td>
+            <td>
+                {{ grupo_rows = db(db.auth_membership.user_id==row.perfil.user).select() }}
+                {{ for grupo in grupo_rows: }}
+                    {{ =grupo.group_id.role }} &nbsp;
+                {{ pass }}                
+                {{ A('cambiar', _href=URL('update_grupo', args=[row.perfil.user])) }}
+            </td>
+        </tr>
+        {{ pass }}
+    </table>
+
+
+

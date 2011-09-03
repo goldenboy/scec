@@ -5,8 +5,6 @@
 @auth.requires_membership('root')
 def index():
 
-    _usuario_tipo = request.vars.tipo
-
     """ lista los siguiente usuarios:
        * tecnico de control_estudio [2]
        * Director de Control de Estudio [3]
@@ -58,14 +56,14 @@ def add():
         _usuario_apellido2 = request.vars.apellido2
         _usuario_email = request.vars.email
         _usuario_tipo = request.vars.tipo
-        _encontrado = db((db.auth_user.username==_usuario_di) | (db.auth_user.email==_usuario_email) ).select().first()
+        _encontrado = db(db.auth_user.username==_usuario_di).select().first()
         if _encontrado:
             mensaje_error = 'DI: %s  Nombre: %s ya existe' % (_usuario_di, _usuario_nombre1)
             
         else:
-            _usuario_id = db.auth_user.insert(username=_usuario_di, email=_usuario_email, first_name=_usuario_di, registration_key='pending')
+            _usuario_id = db.auth_user.insert(username=_usuario_di, first_name=_usuario_di, registration_key='pending')
             auth.add_membership(user_id=_usuario_id, role=_usuario_grupo[_usuario_tipo])
-            db.perfil.insert(user=_usuario_id, di=_usuario_di, nombre1=_usuario_nombre1, apellido1=_usuario_apellido1, nombre2=_usuario_nombre2, apellido2=_usuario_apellido2 )
+            db.perfil.insert(user=_usuario_id, di=_usuario_di, email=_usuario_email, nombre1=_usuario_nombre1, apellido1=_usuario_apellido1, nombre2=_usuario_nombre2, apellido2=_usuario_apellido2 )
             db.acceso.insert(user=_usuario_id)
             session.flash = 'Usuario Agregado'
             redirect (URL('index'))
@@ -90,7 +88,7 @@ def status():
 
 
     if _acceso:
-        if auth.has_membership('root') and es_integrante_grupo(_acceso.user, ['tecnico_control_estudio','personal_control_estudio','director_control_estudio','director_escuela']):
+        if es_integrante_grupo(_acceso.user, ['tecnico_control_estudio','personal_control_estudio','director_control_estudio','director_escuela']):
             form = SQLFORM.factory(
                         Field('username', 'integer', default=_acceso.user.username, writable=False),
                         Field('status', 'string', length=1, requires=IS_IN_SET({'b':'Bloqueado','c':'Codigo Nuevo'}, zero=None)),

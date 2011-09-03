@@ -34,6 +34,12 @@ if auth.has_membership('root'):
     ]
 
 
-
+if auth.has_membership('tecnico_control_estudio') or auth.has_membership('director_control_estudio'):
+    response.menu += [
+        ('Estudiante', False, URL('estudiante','index'), 
+        [
+            ('Agregar', False, URL('estudiante','add'), [])
+        ])
+    ]
 
 

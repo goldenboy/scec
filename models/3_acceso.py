@@ -37,6 +37,6 @@ if auth.is_logged_in():
     _acceso = db(db.acceso.user==id_user).select().first()
 
     if _acceso.status == 'b':
-        session.flash = '<h1>Su Cuenta de usuario esta Bloqueada</h1>'
-        auth.session.auth = None
+        auth.messages.logged_out = 'Usted esta bloqueado'
+        auth.logout()
 

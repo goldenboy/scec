@@ -1,23 +1,155 @@
 # -*- coding: utf-8 -*-
 
+
+
+@auth.requires(auth.requires_membership('tecnico_control_estudio') or auth.requires_membership('director_control_estudio'))
 def index():
 
-    return dict()
+    """ lista los siguiente usuarios:
+        6:'estudiante', 
+        99:'sin asignar'    
+    """
+    query_perfil = db(db.perfil.user==db.acceso.user).select()
+    perfil_rows = query_perfil.find(lambda row: es_integrante_grupo(row.perfil.user,['estudiante','sin_asignar']))
+
+    return dict(perfil_rows=perfil_rows)
 
 
 
-@auth.requires( auth.has_membership('director') or auth.has_membership('decano'))
+
+
+
+@auth.requires_membership('director_control_estudio')
 def add():
 
-    
-    form = SQLFORM.factory(
-                Field('data', 'text')
-            )
-    
-    if form.accepts(request.vars, session):
-        response.flah = 'Datos cargados'
+    mensaje_error = None
 
-    return dict(form=form, carrera=carrera, modalidad_ingreso=modalidad_ingreso)
+
+
+    form = SQLFORM.factory(
+        Field('lote', 'text', label='Data de inscripcion'),
+    )
+
+    if form.accepts(request.vars, session):
+        
+        #my_crypt = CRYPT(key=auth.settings.hmac_key)
+        _usuario_data = request.vars.lote.split('\n')
+        for _usuario in _usuario_data:
+            _usuario = _usuario.split('|')
+            _usuario_di = _usuario[0]
+            _usuario_nombre1 = _usuario[1]
+            _usuario_apellido1 = _usuario[2]
+            _usuario_nombre2 = _usuario[3]
+            _usuario_apellido2 = _usuario[4]
+            _usuario_carrera = _usuario[5]
+            _usuario_modalidad = _usuario[6]
+            _encontrado = db(db.auth_user.username==_usuario_di).select().first()
+            if _encontrado:
+                mensaje_error = 'DI: %s  Nombre: %s ya existe' % (_usuario_di, _usuario_nombre1)
+                
+            else:
+                _usuario_id = db.auth_user.insert(username=_usuario_di, first_name=_usuario_di, registration_key='pending')
+                auth.add_membership(user_id=_usuario_id, role='estudiante')
+                db.perfil.insert(user=_usuario_id, di=_usuario_di, nombre1=_usuario_nombre1, apellido1=_usuario_apellido1, nombre2=_usuario_nombre2, apellido2=_usuario_apellido2 )
+                db.acceso.insert(user=_usuario_id)
+                session.flash = 'Usuario Agregado'
+                redirect (URL('index'))
+
+
+    if mensaje_error:
+        response.flash = mensaje_error
+
+    return dict(form=form)
+
+
+
+@auth.requires(auth.requires_membership('tecnico_control_estudio') or auth.requires_membership('director_control_estudio'))
+def status():
+
+    response.view = 'usuario/add.html'
+    form = None
+    _usuario_id = request.args[0]
+
+
+    _acceso = db(db.acceso.user==_usuario_id).select().first()
+
+
+    if _acceso:
+        if es_integrante_grupo(_acceso.user, ['estudiante']):
+            form = SQLFORM.factory(
+                        Field('username', 'integer', default=_acceso.user.username, writable=False),
+                        Field('status', 'string', length=1, requires=IS_IN_SET({'b':'Bloqueado','c':'Codigo Nuevo'}, zero=None)),
+                        Field('user', default=_acceso.user, writable=False, readable=False),
+            )
+            if form.accepts(request.vars, session):
+
+                if request.vars.status == 'b':
+                    db(db.acceso.user==_acceso.user).update(status='b',codigo_seguridad='')
+                    db(db.auth_user.id==_acceso.user).update(registration_key='pending')
+                elif request.vars.status == 'c':
+                    _codigo_seguridad = generar_codigo_seguridad()
+                    db(db.acceso.user==_acceso.user).update(status='c', codigo_seguridad=_codigo_seguridad)
+                    db(db.auth_user.id==_acceso.user).update(registration_key='pending')
+
+                session.flash = 'Status Actualizado'
+                redirect(URL('index'))
+
+              
+    return dict(form=form)
+
+
+
+@auth.requires_membership('director_control_estudio')
+def update_grupo():
+
+    response.view = 'usuario/add.html'
+    form = None
+    _usuario_id = request.args[0]
+
+    _grupo = ['estudiante']
+
+    _usuario_grupo = db(db.auth_membership.user_id==_usuario_id).select()
+
+
+    
+    _usuario_pertenece =  [_row.group_id.role  for _row in _usuario_grupo]
+
+    form = SQLFORM.factory(
+        Field('username', 'integer', default=_usuario_grupo[0].user_id.username, writable=False),
+        Field('grupo', 'list:string', default=_usuario_pertenece , requires=IS_IN_SET(_grupo, multiple=True, zero=None), widget=SQLFORM.widgets.checkboxes.widget),
+        Field('user', default=_acceso.user, writable=False, readable=False),
+    )
+
+    if form.accepts(request.vars, session):
+        db(db.auth_membership.user_id==_usuario_id).delete()
+        if request.vars.grupo:
+            if isinstance(request.vars.grupo, basestring):
+                auth.add_membership(request.vars.grupo, _usuario_id)
+            else:
+                for nuevo in request.vars.grupo: auth.add_membership(nuevo, _usuario_id)
+        else:
+            auth.add_membership('sin_asignar', _usuario_id)
+
+
+        session.flash = 'Grupo actualizado'
+        redirect (URL('index'))
+    return dict(form=form)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

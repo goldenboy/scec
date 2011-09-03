@@ -18,6 +18,7 @@ _sexo = {
 
 db.define_table('perfil',
     Field('di', 'string', length=64, writable=False, readable=False),
+    Field('email', 'string', length=128),
     Field('nombre1', 'string', length=64),
     Field('apellido1', 'string', length=64),
     Field('nombre2', 'string', length=64),
@@ -36,6 +37,7 @@ db.define_table('perfil',
 )
 
 #requires
+db.perfil.email.requires = IS_EMAIL()
 db.perfil.nombre1.requires = db.perfil.nombre2.requires = db.perfil.apellido1.requires = db.perfil.apellido2.requires = _requires_nombre_apellido
 db.perfil.estado_civil.requires = IS_IN_SET(_estado_civil)
 db.perfil.sexo.requires = IS_IN_SET(_sexo)

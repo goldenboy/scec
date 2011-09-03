@@ -20,8 +20,6 @@ db.define_table('estado', #estado o region del pais
 db.define_table('carrera',
     Field('codigo', 'string', length=10), #obsoleto agregado para soporte del msin
     Field('nombre', 'string', length=64),
-    Field('fecha_reg', 'date', default=request.now, writable=False),
-    Field('user', db.auth_user, default=id_user, writable=False, readable=False),
     format = '%(codigo)s :: %(nombre)s'
 )
 
@@ -30,8 +28,6 @@ db.define_table('carrera',
 db.define_table('modalidad_ingreso',
     Field('codigo', 'string', length=10), #obsoleto agregado para soporte del msin
     Field('nombre', 'string', length=64),
-    Field('fecha_reg', 'date', default=request.now, writable=False),
-    Field('user', db.auth_user, default=id_user, writable=False, readable=False),
     format = '%(codigo)s :: %(nombre)s'
 )
 
@@ -41,7 +37,6 @@ db.define_table('modalidad_ingreso',
 db.define_table('carrera_etapa',
     Field('carrera', db.carrera),
     Field('nombre', 'string', length=64),
-    Field('user', db.auth_user, default=id_user, writable=False, readable=False),
     format = '%(nombre)s'
 )
 

@@ -92,13 +92,15 @@ def setup():
     if len(dato_admin)==0:
     
         # limpia las tablas de control de acceso basado en roles
-        db(db.auth_user.id>0).delete()
-        db(db.auth_group.id>0).delete()
-        db(db.auth_membership.id>0).delete()
-        db(db.auth_permission.id>0).delete()
-        db(db.auth_event.id>0).delete()
-        db(db.pais.id>0).delete()
-        db(db.estado.id>0).delete()
+        db(db.auth_user).delete()
+        db(db.auth_group).delete()
+        db(db.auth_membership).delete()
+        db(db.auth_permission).delete()
+        db(db.auth_event).delete()
+        db(db.pais).delete()
+        db(db.estado).delete()
+        db(db.carrera).delete()
+        db(db.modalidad_ingreso).delete()
 
         #-----------
         # crea todos los grupos de usuarios base
@@ -117,7 +119,7 @@ def setup():
         #registra al administrador
         my_crypt = CRYPT(key=auth.settings.hmac_key)
         id_user = db.auth_user.insert(username='root', first_name='Root', password=my_crypt('root')[0])
-        db.acceso.insert(user=id_user, nivel=1, status='a')
+        db.acceso.insert(user=id_user, status='a')
         #-----------
 
 
@@ -130,6 +132,33 @@ def setup():
         db.pais.insert(nombre='Venezuela')
         db.estado.insert(nombre='Fuera de Venezuela')
         db.estado.insert(nombre='Carabobo')
+
+        # agrega una carrera
+        db.carrera.insert(codigo=613, nombre='Odontología')
+
+        # agrega modalidad_ingreso
+        db.modalidad_ingreso.insert(codigo='1', nombre='Convenio')
+        db.modalidad_ingreso.insert(codigo='2', nombre='CNU')
+        db.modalidad_ingreso.insert(codigo='3', nombre='PAI')
+        db.modalidad_ingreso.insert(codigo='4', nombre='Merito Academico')
+        db.modalidad_ingreso.insert(codigo='5', nombre='Equivalencia')
+        db.modalidad_ingreso.insert(codigo='6', nombre='Traslado')
+        db.modalidad_ingreso.insert(codigo='7', nombre='Merito Deportivo')
+        db.modalidad_ingreso.insert(codigo='8', nombre='Por Oficio')
+        db.modalidad_ingreso.insert(codigo='A', nombre='Merito Cultural')
+        db.modalidad_ingreso.insert(codigo='B', nombre='Merito Cientifico')
+        db.modalidad_ingreso.insert(codigo='C', nombre='Curso Introductorio')
+        db.modalidad_ingreso.insert(codigo='D', nombre='Discapacidad Fisica')
+        db.modalidad_ingreso.insert(codigo='E', nombre='Cambio de Escuela')
+        db.modalidad_ingreso.insert(codigo='M', nombre='Cola Merito ACAD')
+        db.modalidad_ingreso.insert(codigo='N', nombre='CNU COLA')
+        db.modalidad_ingreso.insert(codigo='P', nombre='PAI Corrida')
+        db.modalidad_ingreso.insert(codigo='R', nombre='Reincorporación')
+        db.modalidad_ingreso.insert(codigo='S', nombre='2da Carrera')
+        db.modalidad_ingreso.insert(codigo='Z', nombre='Programa Elejo Zuloaga')
+        db.modalidad_ingreso.insert(codigo='I', nombre='Población Indigena')
+
+
 
 
         response.flash = 'Configuracion de admin realizada'
